@@ -16,15 +16,21 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Scaffold(
-          appBar: AppBar(
-            title: Text('Flutter: Meus primeiros passos'),
-          ),
-          body: Container(
-            color: Colors.black,
-          ),
-          floatingActionButton: Row(children: [
-            FloatingActionButton(onPressed: () {}),
-          ], mainAxisAlignment: MainAxisAlignment.center)),
+        appBar: AppBar(
+          title: Text('Flutter: Meus primeiros passos'),
+        ),
+        body: Container(
+          color: Colors.black,
+        ),
+        floatingActionButton: Row(
+          children: [
+            FloatingActionButton(
+              onPressed: () {},
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
+      ),
     );
   }
 }
