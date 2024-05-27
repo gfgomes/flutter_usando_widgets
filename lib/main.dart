@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:my_first_app/difficulty.dart';
 
 void main() {
   runApp(const MyApp());
@@ -138,45 +136,7 @@ class _TaskState extends State<Task> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 10),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 15,
-                                    color: widget.dificuldade >= 1
-                                        ? Colors.blue
-                                        : Colors.blue[100],
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 15,
-                                    color: widget.dificuldade >= 2
-                                        ? Colors.blue
-                                        : Colors.blue[100],
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 15,
-                                    color: widget.dificuldade >= 3
-                                        ? Colors.blue
-                                        : Colors.blue[100],
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 15,
-                                    color: widget.dificuldade >= 4
-                                        ? Colors.blue
-                                        : Colors.blue[100],
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 15,
-                                    color: widget.dificuldade >= 5
-                                        ? Colors.blue
-                                        : Colors.blue[100],
-                                  ),
-                                ],
-                              ),
+                              child: Difficulty(task: widget),
                             ),
                           ],
                         ),
