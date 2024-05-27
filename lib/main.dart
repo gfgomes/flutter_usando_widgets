@@ -18,20 +18,29 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
+          leading: Container(),
           title: Text('Tarefas'),
         ),
         body: ListView(
           children: [
-            const Task("Aprender Flutter"),
-            const Task("Aprender a andar de bike"),
-            const Task("Aprender a meditar"),
-            const Task("Aprender a meditar"),
-            const Task("Aprender a meditar"),
-            const Task("Aprender a meditar"),
-            const Task("Aprender a meditarasasasas"),
-            const Task("Aprender a meditar"),
-            const Task("Aprender a meditar"),
-            const Task("Aprender a meditar"),
+            const Task(
+                "Aprender Flutter",
+                "https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large",
+                1),
+            const Task(
+                "Aprender a andar de bike",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtUFOIQ2wY1mB7r5Io35FTdVduQcXMcfD82r2D07p9ww&s",
+                2),
+            const Task(
+                "Aprender a meditar",
+                "https://manhattanmentalhealthcounseling.com/wp-content/uploads/2019/06/Top-5-Scientific-Findings-on-MeditationMindfulness-881x710.jpeg",
+                3),
+            const Task(
+                "Ler",
+                "https://thebogotapost.com/wp-content/uploads/2017/06/636052464065850579-137719760_flyer-image-1.jpg",
+                4),
+            Task('Jogar',
+                'https://i.ibb.co/tB29PZB/kako-epifania-2022-2-c-pia.jpg', 5),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -45,8 +54,10 @@ class MyApp extends StatelessWidget {
 
 class Task extends StatefulWidget {
   final String nome;
+  final String foto;
+  final int dificuldade;
 
-  const Task(this.nome, {super.key});
+  const Task(this.nome, this.foto, this.dificuldade, {super.key});
 
   @override
   State<Task> createState() => _TaskState();
@@ -78,22 +89,88 @@ class _TaskState extends State<Task> {
                           color: Colors.grey,
                           height: 100,
                           width: 80,
-                        ),
-                        Container(
-                          width: 200,
-                          child: Text(
-                            widget.nome,
-                            style: TextStyle(fontSize: 24),
-                            overflow: TextOverflow.ellipsis,
+                          child: Image.network(
+                            widget.foto,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              nivel++;
-                            });
-                          },
-                          child: Icon(Icons.arrow_drop_up),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 200,
+                              child: Text(
+                                widget.nome,
+                                style: TextStyle(fontSize: 24),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    size: 15,
+                                    color: widget.dificuldade >= 1
+                                        ? Colors.blue
+                                        : Colors.blue[100],
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 15,
+                                    color: widget.dificuldade >= 2
+                                        ? Colors.blue
+                                        : Colors.blue[100],
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 15,
+                                    color: widget.dificuldade >= 3
+                                        ? Colors.blue
+                                        : Colors.blue[100],
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 15,
+                                    color: widget.dificuldade >= 4
+                                        ? Colors.blue
+                                        : Colors.blue[100],
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 15,
+                                    color: widget.dificuldade >= 5
+                                        ? Colors.blue
+                                        : Colors.blue[100],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: 52,
+                          width: 52,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                nivel++;
+                              });
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Icon(Icons.arrow_drop_up),
+                                Text(
+                                  'UP',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
                         )
                       ]),
                 ),
@@ -106,7 +183,14 @@ class _TaskState extends State<Task> {
                         width: 200,
                         child: LinearProgressIndicator(
                           color: Colors.green,
-                          value: nivel / 100,
+                          value: () {
+                            if (widget.dificuldade > 0) {
+                              double newLevel = nivel / widget.dificuldade;
+                              return newLevel / 10;
+                            }
+
+                            return 1.0;
+                          }(),
                         ),
                       ),
                     ),
