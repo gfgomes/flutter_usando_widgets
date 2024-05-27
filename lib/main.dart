@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -5,13 +7,20 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool opaque = true;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Meu todo app',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: false,
@@ -21,31 +30,40 @@ class MyApp extends StatelessWidget {
           leading: Container(),
           title: Text('Tarefas'),
         ),
-        body: ListView(
-          children: [
-            const Task(
-                "Aprender Flutter",
-                "https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large",
-                1),
-            const Task(
-                "Aprender a andar de bike",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtUFOIQ2wY1mB7r5Io35FTdVduQcXMcfD82r2D07p9ww&s",
-                2),
-            const Task(
-                "Aprender a meditar",
-                "https://manhattanmentalhealthcounseling.com/wp-content/uploads/2019/06/Top-5-Scientific-Findings-on-MeditationMindfulness-881x710.jpeg",
-                3),
-            const Task(
-                "Ler",
-                "https://thebogotapost.com/wp-content/uploads/2017/06/636052464065850579-137719760_flyer-image-1.jpg",
-                4),
-            Task('Jogar',
-                'https://i.ibb.co/tB29PZB/kako-epifania-2022-2-c-pia.jpg', 5),
-          ],
+        body: AnimatedOpacity(
+          opacity: opaque ? 1 : 0,
+          duration: Duration(milliseconds: 800),
+          child: ListView(
+            children: [
+              const Task(
+                  "Aprender Flutter",
+                  "https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large",
+                  1),
+              const Task(
+                  "Aprender a andar de bike",
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtUFOIQ2wY1mB7r5Io35FTdVduQcXMcfD82r2D07p9ww&s",
+                  2),
+              const Task(
+                  "Aprender a meditar",
+                  "https://manhattanmentalhealthcounseling.com/wp-content/uploads/2019/06/Top-5-Scientific-Findings-on-MeditationMindfulness-881x710.jpeg",
+                  3),
+              const Task(
+                  "Ler",
+                  "https://thebogotapost.com/wp-content/uploads/2017/06/636052464065850579-137719760_flyer-image-1.jpg",
+                  4),
+              Task('Jogar',
+                  'https://i.ibb.co/tB29PZB/kako-epifania-2022-2-c-pia.jpg', 5),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {},
+          child: Icon(
+              opaque ? Icons.remove_red_eye : Icons.remove_red_eye_outlined),
+          onPressed: () {
+            setState(() {
+              opaque = !opaque;
+            });
+          },
         ),
       ),
     );

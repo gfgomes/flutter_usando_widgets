@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyFistWidget());
-}
+// void main() {
+//   runApp(const MyFirstWidget());
+// }
 
-class MyFistWidget extends StatelessWidget {
-  const MyFistWidget({super.key});
+class MyFirstWidget extends StatelessWidget {
+  const MyFirstWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +86,42 @@ class MyFistWidget extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                print('Você apertou o Botão!');
-              },
               child: const Text('Aperte o botão!!'),
+              onPressed: () {
+                showAlertDialog(context);
+                print('Você apertou o Botão para abrir!');
+              },
             )
           ],
         ),
       ),
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text("This is my message."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
