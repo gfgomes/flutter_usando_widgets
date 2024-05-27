@@ -74,24 +74,36 @@ class _TaskState extends State<Task> {
         child: Stack(
           children: [
             Container(
-              color: Colors.blue,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.blue,
+              ),
               height: 140,
             ),
             Column(
               children: [
                 Container(
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.white,
+                  ),
                   height: 100,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          color: Colors.grey,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.grey,
+                          ),
                           height: 100,
                           width: 80,
-                          child: Image.network(
-                            widget.foto,
-                            fit: BoxFit.cover,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: Image.network(
+                              widget.foto,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         Column(
@@ -151,6 +163,7 @@ class _TaskState extends State<Task> {
                           ],
                         ),
                         Container(
+                          margin: EdgeInsets.only(right: 15),
                           height: 52,
                           width: 52,
                           child: ElevatedButton(
