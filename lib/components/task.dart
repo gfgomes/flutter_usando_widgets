@@ -1,6 +1,4 @@
-import 'dart:ffi';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'difficulty.dart';
 
@@ -82,20 +80,7 @@ class _TaskState extends State<Task> {
                         width: 52,
                         child: ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              level++;
-
-                              double newLevelRestartController =
-                                  (level / widget.difficulty) / 10;
-
-                              bool isLevelCompleted =
-                                  newLevelRestartController > 1;
-                              if (isLevelCompleted) {
-                                levelColor = Colors.primaries[
-                                    Random().nextInt(Colors.primaries.length)];
-                                level = 1;
-                              }
-                            });
+                            changeColorControl();
                           },
                           child: const Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -151,5 +136,20 @@ class _TaskState extends State<Task> {
         ],
       ),
     );
+  }
+
+  void changeColorControl() {
+    return setState(() {
+      level++;
+
+      double newLevelRestartController = (level / widget.difficulty) / 10;
+
+      bool isLevelCompleted = newLevelRestartController > 1;
+      if (isLevelCompleted) {
+        levelColor =
+            Colors.primaries[Random().nextInt(Colors.primaries.length)];
+        level = 1;
+      }
+    });
   }
 }
