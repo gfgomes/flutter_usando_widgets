@@ -114,6 +114,13 @@ class _FormScreenState extends State<FormScreen> {
                         print(_nomeTarefaController.text);
                         print(int.parse(_dificuldadeTarefaController.text));
                         print(_imagemTarefaController.text);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Tarefa criada com sucesso!'),
+                          ),
+                        );
+                        Navigator.pop(context);
                       }
                     },
                     child: const Text('Adicionar'),

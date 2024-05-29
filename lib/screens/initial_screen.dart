@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:my_first_app/screens/form_screen.dart';
 import '../components/task.dart';
 
 class InitialScreen extends StatefulWidget {
@@ -19,27 +19,25 @@ class _InitialScreenState extends State<InitialScreen> {
         leading: Container(),
         title: const Text('Tarefas'),
       ),
-      body: AnimatedOpacity(
-        opacity: opaque ? 1 : 0,
-        duration: const Duration(milliseconds: 800),
-        child: ListView(
-          children: const [
-            Task("Aprender Flutter", "assets/images/1_img.png", 1),
-            Task("Aprender a andar de bike", "assets/images/2_img.jpg", 2),
-            Task("Aprender a meditar", "assets/images/3_img.jpeg", 3),
-            Task("Ler", "assets/images/4_img.jpg", 4),
-            Task('Jogar', "assets/images/5_img.jpg", 5),
-            SizedBox(height: 80),
-          ],
-        ),
+      body: ListView(
+        children: const [
+          Task("Aprender Flutter", "assets/images/1_img.png", 1),
+          Task("Aprender a andar de bike", "assets/images/2_img.jpg", 2),
+          Task("Aprender a meditar", "assets/images/3_img.jpeg", 3),
+          Task("Ler", "assets/images/4_img.jpg", 4),
+          Task('Jogar', "assets/images/5_img.jpg", 5),
+          SizedBox(height: 80),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        child:
-            Icon(opaque ? Icons.remove_red_eye : Icons.remove_red_eye_outlined),
+        child: const Icon(Icons.add),
         onPressed: () {
-          setState(() {
-            opaque = !opaque;
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FormScreen(),
+            ),
+          );
         },
       ),
     );
