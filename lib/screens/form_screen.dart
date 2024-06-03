@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:my_first_app/components/difficulty.dart';
+import 'package:my_first_app/data/task_inherited.dart';
 
 class FormScreen extends StatefulWidget {
-  const FormScreen({super.key});
+  const FormScreen({super.key, required this.taskContext});
+
+  final BuildContext taskContext;
 
   @override
   State<FormScreen> createState() => _FormScreenState();
@@ -14,6 +17,23 @@ class _FormScreenState extends State<FormScreen> {
   TextEditingController _imagemTarefaController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  bool valueIsValid(String? value) {
+    if (value != null && value.isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
+  bool difficultyIsValid(String? value) {
+    if (value != null && int.tryParse(value) == null) {
+      return false;
+    }
+    if (int.parse(value!) > 5 || int.parse(value!) < 1) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +61,9 @@ class _FormScreenState extends State<FormScreen> {
                     child: TextFormField(
                       controller: _nomeTarefaController,
                       textAlign: TextAlign.center,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Insira o nome da tarefa.' : null,
+                      validator: (value) => valueIsValid(value)
+                          ? null
+                          : 'Insira o nome da tarefa.',
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Nome da terefa',
@@ -55,12 +76,9 @@ class _FormScreenState extends State<FormScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       controller: _dificuldadeTarefaController,
-                      validator: (value) => value!.isEmpty ||
-                              int.tryParse(value) == null ||
-                              int.parse(value) > 5 ||
-                              int.parse(value) < 1
-                          ? 'Insira um valor entre 1 e 5.'
-                          : null,
+                      validator: (value) => difficultyIsValid(value)
+                          ? null
+                          : 'Insira um valor entre 1 e 5.',
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
@@ -75,8 +93,9 @@ class _FormScreenState extends State<FormScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       controller: _imagemTarefaController,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Insira a URL da imagem.' : null,
+                      validator: (value) => valueIsValid(value)
+                          ? null
+                          : 'Insira a URL da imagem.',
                       keyboardType: TextInputType.url,
                       onChanged: (text) => setState(() {}),
                       textAlign: TextAlign.center,
@@ -111,9 +130,14 @@ class _FormScreenState extends State<FormScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        print(_nomeTarefaController.text);
-                        print(int.parse(_dificuldadeTarefaController.text));
-                        print(_imagemTarefaController.text);
+                        // print(_nomeTarefaController.text);
+                        // print(int.parse(_dificuldadeTarefaController.text));
+                        // print(_imagemTarefaController.text);
+
+                        TaskInherited.of(widget.taskContext)!.newTask(
+                            _nomeTarefaController.text,
+                            _imagemTarefaController.text,
+                            int.parse(_dificuldadeTarefaController.text));
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
