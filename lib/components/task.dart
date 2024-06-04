@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:my_first_app/data/task_inherited.dart';
 import 'difficulty.dart';
 
 class Task extends StatefulWidget {
@@ -94,7 +95,7 @@ class _TaskState extends State<Task> {
                         width: 52,
                         child: ElevatedButton(
                           onPressed: () {
-                            changeColorControl();
+                            changeColorControl(context);
                           },
                           child: const Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -152,7 +153,7 @@ class _TaskState extends State<Task> {
     );
   }
 
-  void changeColorControl() {
+  void changeColorControl(BuildContext context) {
     return setState(() {
       widget.level++;
 

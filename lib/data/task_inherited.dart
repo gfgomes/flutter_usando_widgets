@@ -8,10 +8,26 @@ class TaskInherited extends InheritedWidget {
   final List<Task> taskList = [
     Task('Aprender Flutter', 'assets/images/1_img.png', 1),
     Task('Aprender a andar de bike', 'assets/images/2_img.jpg', 2),
-    Task('Aprender a meditar', 'assets/images/3_img.jpeg', 3),
-    Task('Ler', 'assets/images/4_img.jpg', 4),
-    Task('Jogar', 'assets/images/5_img.jpg', 5),
+    // Task('Aprender a meditar', 'assets/images/3_img.jpeg', 3),
+    // Task('Ler', 'assets/images/4_img.jpg', 4),
+    // Task('Jogar', 'assets/images/5_img.jpg', 5),
   ];
+
+  double getGlobalProgress() {
+    double progress = 0.0;
+    for (var task in taskList) {
+      progress += ((task.level / task.difficulty) / taskList.length) / 10;
+    }
+    return progress;
+  }
+
+  double getGlobalLevel() {
+    double level = 0.0;
+    for (var task in taskList) {
+      level += task.level;
+    }
+    return level;
+  }
 
   void newTask(String name, String photo, int difficulty) {
     taskList.add(Task(name, photo, difficulty));
