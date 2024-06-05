@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/components/difficulty.dart';
+import 'package:my_first_app/components/task.dart';
 import 'package:my_first_app/data/task_inherited.dart';
+import 'package:my_first_app/data/tasks_dao.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key, required this.taskContext});
@@ -30,6 +32,18 @@ class _FormScreenState extends State<FormScreen> {
       return false;
     }
     if (int.parse(value!) > 5 || int.parse(value!) < 1) {
+      return false;
+    }
+    return true;
+  }
+
+  bool imageIsValid(String? value) {
+    if (value != null && value.isEmpty) {
+      return false;
+    }
+    if ((value != null && (!value.endsWith('.jpg'))) &&
+        (value != null && (!value.endsWith('.jpeg'))) &&
+        (value != null && (!value.endsWith('.png')))) {
       return false;
     }
     return true;
@@ -93,7 +107,7 @@ class _FormScreenState extends State<FormScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       controller: _imagemTarefaController,
-                      validator: (value) => valueIsValid(value)
+                      validator: (value) => imageIsValid(value)
                           ? null
                           : 'Insira a URL da imagem.',
                       keyboardType: TextInputType.url,
@@ -134,10 +148,18 @@ class _FormScreenState extends State<FormScreen> {
                         // print(int.parse(_dificuldadeTarefaController.text));
                         // print(_imagemTarefaController.text);
 
-                        TaskInherited.of(widget.taskContext)!.newTask(
-                            _nomeTarefaController.text,
-                            _imagemTarefaController.text,
-                            int.parse(_dificuldadeTarefaController.text));
+                        // TaskInherited.of(widget.taskContext)!.newTask(
+                        //     _nomeTarefaController.text,
+                        //     _imagemTarefaController.text,
+                        //     int.parse(_dificuldadeTarefaController.text));
+
+                        Task newTask = Task(
+                          _nomeTarefaController.text,
+                          _imagemTarefaController.text,
+                          int.parse(_dificuldadeTarefaController.text),
+                        );
+
+                        TasksDao().save(newTask);
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

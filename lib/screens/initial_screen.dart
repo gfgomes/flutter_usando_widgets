@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/data/task_inherited.dart';
+import 'package:my_first_app/data/tasks_dao.dart';
 import 'package:my_first_app/screens/form_screen.dart';
 import '../components/task.dart';
 
@@ -18,13 +19,20 @@ class _InitialScreenState extends State<InitialScreen> {
     return Scaffold(
       appBar: AppBar(
         //leading: Container(),
+        actions: [
+          IconButton(
+              onPressed: () {
+                _atualizarTela();
+              },
+              icon: const Icon(Icons.refresh))
+        ],
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
                     Text('Tarefas'),
                   ],
@@ -36,14 +44,15 @@ class _InitialScreenState extends State<InitialScreen> {
                       child: LinearProgressIndicator(
                         value: TaskInherited.of(context)!.getGlobalProgress(),
                         backgroundColor: Colors.blue[100],
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.blue),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                           'Level: ${TaskInherited.of(context)!.getGlobalLevel().toStringAsFixed(2)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w400)),
                     ),
                   ],
@@ -52,17 +61,67 @@ class _InitialScreenState extends State<InitialScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                setState(() {});
+                _atualizarTela();
               },
-              child: Icon(Icons.refresh),
+              child: const Icon(Icons.refresh),
             )
           ],
         ),
       ),
-      body: ListView(
-        children: TaskInherited.of(context)!.taskList,
-        padding: EdgeInsets.only(top: 8, bottom: 100),
-      ),
+      body: FutureBuilder<List<Task>>(
+          future: TasksDao().findAll(),
+          builder: (context, snapshot) {
+            List<Task>? taskList = snapshot.data;
+
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                return const Center(
+                  child: Column(children: [
+                    CircularProgressIndicator(),
+                    Text('Carregando...')
+                  ]),
+                );
+
+                break;
+              case ConnectionState.waiting:
+                return const Center(
+                  child: Column(children: [
+                    CircularProgressIndicator(),
+                    Text('Carregando...')
+                  ]),
+                );
+              case ConnectionState.active:
+                return const Center(
+                  child: Column(children: [
+                    CircularProgressIndicator(),
+                    Text('Carregando...')
+                  ]),
+                );
+              case ConnectionState.done:
+                if (snapshot.hasData && taskList != null) {
+                  if (taskList.isNotEmpty) {
+                    return ListView.builder(
+                      itemCount: taskList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        Task task = taskList[index];
+                        task.onTaskDeleted = _atualizarTela;
+                        return task;
+                      },
+                    );
+                    _atualizarTela();
+                  }
+                  return const Center(
+                    child: Column(
+                      children: [
+                        Icon(Icons.error_outline, size: 128),
+                        Text('Nenhuma tarefa cadastrada!'),
+                      ],
+                    ),
+                  );
+                }
+                return const Text('Erro ao carregar tarefas');
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
@@ -73,9 +132,17 @@ class _InitialScreenState extends State<InitialScreen> {
                 taskContext: context,
               ),
             ),
+          ).then(
+            (value) => setState(() {}),
           );
         },
       ),
     );
+  }
+
+  void _atualizarTela() {
+    setState(() {
+      print("recarregando a tela inicial");
+    });
   }
 }

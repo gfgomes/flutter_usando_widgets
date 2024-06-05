@@ -6,8 +6,8 @@ class TaskInherited extends InheritedWidget {
 
   final Widget child;
   final List<Task> taskList = [
-    Task('Aprender Flutter', 'assets/images/1_img.png', 1),
-    Task('Aprender a andar de bike', 'assets/images/2_img.jpg', 2),
+    // Task('Aprender Flutter', 'assets/images/1_img.png', 1),
+    // Task('Aprender a andar de bike', 'assets/images/2_img.jpg', 2),
     // Task('Aprender a meditar', 'assets/images/3_img.jpeg', 3),
     // Task('Ler', 'assets/images/4_img.jpg', 4),
     // Task('Jogar', 'assets/images/5_img.jpg', 5),
@@ -30,11 +30,19 @@ class TaskInherited extends InheritedWidget {
   }
 
   void newTask(String name, String photo, int difficulty) {
-    taskList.add(Task(name, photo, difficulty));
+    taskList.add(Task(
+      name,
+      photo,
+      difficulty,
+    ));
   }
 
   void deleteTask(Task task) {
     taskList.remove(task);
+  }
+
+  void RealoadScreen(Function() callback) {
+    callback();
   }
 
   static TaskInherited? of(BuildContext context) {

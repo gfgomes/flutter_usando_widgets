@@ -1,12 +1,15 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_first_app/data/task_inherited.dart';
+import 'package:my_first_app/data/tasks_dao.dart';
 import 'difficulty.dart';
 
 class Task extends StatefulWidget {
   final String nome;
   final String photo;
   final int difficulty;
+  late VoidCallback onTaskDeleted;
 
   Task(this.nome, this.photo, this.difficulty, {super.key});
 
@@ -14,6 +17,23 @@ class Task extends StatefulWidget {
 
   @override
   State<Task> createState() => _TaskState();
+
+  static Task fromMap(Map<String, dynamic> e) {
+    return Task(
+      e['name'],
+      e['image'],
+      e['difficulty'],
+    );
+    //return Task(e['name'], 'assets/images/1_img.png', e['difficulty']);
+  }
+
+  Map<String, Object?> toMap() {
+    return {
+      'name': nome,
+      'image': photo,
+      'difficulty': difficulty,
+    };
+  }
 }
 
 class _TaskState extends State<Task> {
@@ -94,6 +114,50 @@ class _TaskState extends State<Task> {
                         height: 52,
                         width: 52,
                         child: ElevatedButton(
+                          onLongPress: () {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible:
+                                  false, // user must tap button!
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Deseja exlcuir a tarefa?'),
+                                  content: const SingleChildScrollView(
+                                    child: ListBody(
+                                      children: <Widget>[
+                                        Text(
+                                            'Esta ação não poderá ser desfeita.'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Cancelar'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text(
+                                        'Confirmar',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      onPressed: () {
+                                        TasksDao().delete(widget.nome);
+                                        widget.onTaskDeleted();
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              WidgetStatePropertyAll(
+                                                  Colors.red)),
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                            //TasksDao().delete(widget.nome);
+                          },
                           onPressed: () {
                             changeColorControl(context);
                           },
